@@ -1,0 +1,30 @@
+{
+  "key": "MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDH4yMyi+3R29DUdGbM2QLNqgmmYc48UkA0Qy5n2SZYyP2qkDcR9iOod294CIswN2uY8Bw+wWlDfbUImd2eOg2cgflG2GrYVF0y6ecBn+GNRjrVTA/3zZbQDmExvR3YPhiFJDES8PTFQTcZhgkzQZ55C81S6TvqJs/5V42GSjS+fRxAeY84TgdYcUV3OJymMxpCqHbHXuTtW3fLshKcYl+EAWH7PvmevIVc1ycWMOaypin9794JQtTwRRQ7M1VhTFXy/SeEiAa29E4SmExXh8/AcjNF23SgFP4hAd4dl12B7QcXIIiwVvI/V9qAlubkA+rF0PnIJm+uSgLMSQWeyko/AgMBAAECggEACUUausYL2hxW9k4M/m8KAZO4gtjXrFXRgxr31KUYxtamEk+XM462CfgQBAG8GBkEimvdmM4gyEUqLM3wnd0/Xa9sFMGwotEMHseuM5XAlhattSVOkEVz5bjk/7OE5iRrFVxKUlXjuXTUI1Y4qFc2DD254KB5wNram6EDKo6CclsHWkX6b+Orw95gAT7VdoGjxR3FUvaOD8E+WUkTpS0mUo/Vtvzn0Roaw+C8IIga5nSu3mJ1dVbl7OwBSbi5Jvd2GPFJ1M5I0xcOzqrU0T6qr6d+qZU2fAhSb87DHG+kqO/pGOtepzSZSb8C/CwBbB4+gNN8IZIObNGpoehnYnmZwQKBgQDmI+aQjsDgucm9G6wyTCaJJG/3LJ3AUEexflEEL+oMKH/alJI+GoZMZbaeLNg4grq3+cdrmmzivBYPWbEC0b2k0qJzfScPBaaHie3Cy3sTB+uyccl52K0ZoUW212cKWoTbkCR4XgVXYZyf/N/MCuIrDdORzImF+BuvwmaybRha0QKBgQDeWP6iwGV64zR8ipcGV+DpuCyAN247Re5Bg0cl0Wv1RRZ6h2pnkU1P/UozHalATio5jI2lt6K9mpyq5CW1lYOYqnxGBI+3uzJTVOyBAWVodvrhi3mwGnGfpRZ7WJl2bNHYsDetgCVtaNo4KzD9hqvxxdxOyzGMpiuI7Nmf79t4DwKBgDzWrsP2SPzfgHpSj3H4eZN1o3e3PrixQFKmruopdHjkV/BDqGlsf6ZAmUc1Wa+Ot6edC1/hwfkqebZzIn05TyX8XN+k7SdmegCIsOb2/cEpLeDNfdKNOi11WcWdKestxMN6VnnPeSABePM+WTdKhUGWdSCs7ooQ7djHznhKqM6RAoGBAKnJsaCcZKHDcCgOOKdaYeB3iFvceCuBCiAy3Biv482mlTS5xXISzcPgOlHwO3dkeO/7OYsrQHWi5DHHCFiyNIxW25EoGIsHwrVJq1QTudlcydWDiUgF2XA8Q3+rN3zsOg5K+ileKrZyk/jCWqWuugxkuAffOBYcKjBkFQcBxUjXAoGANpot9SA1YxoZYDQ3FZdfKSP4oGh0EkzY9+Y/HVHqvzP75RQr0JUzFNTl6gaPimdd2f9ru4QyLfrSyrbyBT1K3wvxQpFnkpwsHsWRsO/4TqhTrmuIHc/rIIbo5K662gbgmqETKGoEozqbhJ92DPvUjACbkFh06KfA6fMG11tkN4s=",
+  "name": "QA",
+  "version": "1.0",
+  "manifest_version": 3,
+
+  "permissions": [
+    "identity",
+    "storage",
+    "sidePanel"
+  ],
+
+  "host_permissions": [
+    "https://login.microsoftonline.com/*",
+    "https://graph.microsoft.com/*",
+    "https://audit-ops.traxtech.com/"
+  ],
+
+  "background": {
+    "service_worker": "background.js"
+  },
+
+  "action": {
+    "default_title": "Open Panel"
+  },
+
+  "side_panel": {
+    "default_path": "index.html"
+  }
+}
