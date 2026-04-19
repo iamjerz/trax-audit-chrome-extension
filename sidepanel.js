@@ -154,11 +154,11 @@ $(document).ready(function() {
 });
 
 
-$(document).ready(function() {
-    $(document).on('click', '#recon-form', function() {
-        loadForm("recon")
-    });
-});
+// $(document).ready(function() {
+//     $(document).on('click', '#recon-form', function() {
+//         loadForm("recon")
+//     });
+// });
 
 // $(document).ready(function() {
 //     $(document).on('click', '#triad-form', function() {

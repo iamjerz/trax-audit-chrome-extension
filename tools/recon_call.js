@@ -1,4 +1,39 @@
 $(document).ready(function() {
+    $(document).on('click', '#recon-form', function() {
+        reconSelect("recon")
+    });
+});
+
+
+function reconSelect(title) {
+    showLoader();
+
+    const token = localStorage.getItem('token');
+    console.log("TOKEN::::", token);
+
+    $.ajax({
+        url: 'https://audit-ops.traxtech.com/api/forms/recon',
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Accept': 'application/json'
+        },
+        success: function(response) {
+            $('#page-body').html(response);
+            
+            dynamicChoices();
+            flatpickr(".datetime-js")
+            document.getElementById("lda-email").value = localStorage.getItem('email').toLowerCase();
+            hideLoader();
+        },
+        error: function(xhr) {
+            console.log(xhr.responseText);
+        }
+    });
+}
+
+
+$(document).ready(function() {
     $(document).on('click', '#submitBtn', async function() {
         showLoader();
         const data = {
@@ -51,6 +86,7 @@ $(document).ready(function() {
                         choicesInit(".choices-js");
                         dateTimeInit(".datetime-js");
                         document.getElementById("lda-email").value = localStorage.getItem('email').toLowerCase();
+                        
                         hideLoader();
                     },
                     error: function(xhr) {

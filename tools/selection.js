@@ -10,8 +10,8 @@ $(document).ready(function() {
     });
 });
 
-// ✅ GLOBAL (only declare ONCE)
-const choicesMap = {};
+// // ✅ GLOBAL (only declare ONCE)
+// const choicesMap = {};
 
 function selection(title) {
     showLoader();
