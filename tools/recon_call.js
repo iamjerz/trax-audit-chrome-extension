@@ -49,7 +49,8 @@ $(document).ready(function() {
             jira_ticket: document.getElementById("jira-link").value,
             status: document.getElementById("status").value,
             raw_data: {
-                source: "frontend"
+                source: "Chrome Extension",
+                branch: "Test Data Only"
             }
         };
 
@@ -72,27 +73,7 @@ $(document).ready(function() {
 
             if (response.ok) {
                 alert("✅ Saved successfully!");
-                const token = localStorage.getItem('token');
-                $.ajax({
-                    url: 'https://audit-ops.traxtech.com/api/forms/recon',
-                    method: 'GET', // or POST
-                    headers: {
-                        'Authorization': 'Bearer ' + token,
-                        'Accept': 'application/json'
-                    },
-                    success: function(response) {
-                        $('#page-body').html(response);
-
-                        choicesInit(".choices-js");
-                        dateTimeInit(".datetime-js");
-                        document.getElementById("lda-email").value = localStorage.getItem('email').toLowerCase();
-                        
-                        hideLoader();
-                    },
-                    error: function(xhr) {
-                        console.log(xhr.responseText);
-                    }
-                });
+                reconSelect("recon")
             } else {
                 alert("❌ Error: " + JSON.stringify(result));
             }
