@@ -69,7 +69,7 @@ function appendCarrierCode(client_code) {
     const token = localStorage.getItem('token');
     showLoader();
     $.ajax({
-        url: 'https://audit-ops.traxtech.com/api/dropdown/carrier-code',
+        url: `${CONFIG.API_BASE_URL}/api/dropdown/carrier-code`,
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${token}`,

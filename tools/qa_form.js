@@ -6,10 +6,17 @@ $(document).ready(function() {
 
 function qa_form() {
     showLoader();
+
     const token = localStorage.getItem('token');
+    const email = localStorage.getItem('email').toLowerCase();
+
     $.ajax({
-        url: 'https://audit-ops.traxtech.com/api/forms/qa',
-        method: 'GET', // or POST
+        url: `${CONFIG.API_BASE_URL}/api/forms/qa`,
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({
+            email: email
+        }),
         headers: {
             'Authorization': 'Bearer ' + token,
             'Accept': 'application/json'
@@ -17,10 +24,16 @@ function qa_form() {
         success: function(response) {
             $('#page-body').html(response);
 
-            // choicesInit(".choices-js");
-            // dateTimeInit(".datetime-js");
             initQAform();
-            document.getElementById("audit-by").value = localStorage.getItem('email').toLowerCase();
+            flatpickr("#audit-date2", {
+                defaultDate: "today",
+                clickOpens: false, // disables opening calendar
+                allowInput: false  // prevents typing
+            });
+            if (email) {
+                document.getElementById("audit-by").value = email;
+            }
+
             hideLoader();
         },
         error: function(xhr) {
@@ -28,7 +41,6 @@ function qa_form() {
         }
     });
 }
-
 // ============================================================
 // QA MONITORING FORM INIT.
 // ============================================================
@@ -394,26 +406,22 @@ function initQAform() {
         });
     });
 
-    function showWelcomeAlert(message, icon) {
-
-        Swal.fire({
-            position: "top-end",
-            icon: icon,
-            title: message,
-            showConfirmButton: !1,
-            timer: 2500
-        })
-
-        if (icon == "success") {
-            qa_form();
-        }
-    }
+    
 
     document.getElementById("submit-qa-btn")?.addEventListener("click", function(e) {
         e.preventDefault(); // ✅ prevent form reload
 
         const auditBy = document.getElementById("audit-by").value;
         userInputData["AuditBy"] = auditBy;
+
+        userInputData.AuditorsName = document.getElementById("auditors-name").value;
+        userInputData.AuditDate2 = document.getElementById("audit-date2").value;
+        userInputData.CarrierName = document.getElementById("carrier-name").value;
+        userInputData.ExceptionStatus = document.getElementById("exception-status").value;
+        userInputData.ExceptionOwner = document.getElementById("exception-owner").value;
+
+
+
         const payload = {
             userInputData,
             verificationData,
@@ -423,8 +431,9 @@ function initQAform() {
         };
 
         console.log("FINAL PAYLOAD:", payload);
+        showLoader();
         const token = localStorage.getItem('token');
-        fetch("https://audit-ops.traxtech.com/api/qa-form", {
+        fetch(`${CONFIG.API_BASE_URL}/api/qa-form`, {
                 method: "POST",
                 headers: {
                     "Authorization": 'Bearer ' + token,
@@ -439,14 +448,17 @@ function initQAform() {
                 return data;
             })
             .then(data => {
-                console.log("SUCCESS:", data);
-                // alert(`Audit created! ID: ${data.audit_id}`);
-                // // ✅ Refresh page AFTER success
-                showWelcomeAlert("Audit created successfully!", "success");
+                hideLoader();
+                ShowAlertMessage("Audit created successfully!", "success");
+                
+
+                setTimeout(() => {
+                    qa_form();
+                }, 3000);
 
             })
             .catch(err => {
-                showWelcomeAlert("Failed to submit audit. Check console.", "error");
+                ShowAlertMessage("Failed to submit audit. Check console.", "error");
                 console.error("API ERROR:", err);
                 console.log("API ERROR:", data);
                 // alert("Failed to submit audit. Check console.");

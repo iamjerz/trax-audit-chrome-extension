@@ -92,7 +92,7 @@ $(document).ready(function() {
 
             console.log(TriadForm);
             showLoader();
-            const res = await fetch('https://audit-ops.traxtech.com/api/triad', {
+            const res = await fetch(`${CONFIG.API_BASE_URL}/api/triad`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -107,9 +107,14 @@ $(document).ready(function() {
 
             const data = await res.json();
             if (data.status === 200) {
-
-                selection("Triad");
                 hideLoader();
+
+                ShowAlertMessage("Audit created successfully!", "success");
+
+                setTimeout(() => {
+                    selection("Triad");
+                }, 3000);
+                
             }
 
         } catch (err) {

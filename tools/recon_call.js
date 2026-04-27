@@ -12,7 +12,7 @@ function reconSelect(title) {
     console.log("TOKEN::::", token);
 
     $.ajax({
-        url: 'https://audit-ops.traxtech.com/api/forms/recon',
+        url: `${CONFIG.API_BASE_URL}/api/forms/recon`,
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${token}`,
@@ -23,6 +23,8 @@ function reconSelect(title) {
             
             dynamicChoices();
             flatpickr(".datetime-js")
+
+            
             document.getElementById("lda-email").value = localStorage.getItem('email').toLowerCase();
             hideLoader();
         },
@@ -57,7 +59,7 @@ $(document).ready(function() {
         const token = localStorage.getItem('token');
 
         try {
-            const response = await fetch("https://audit-ops.traxtech.com/api/recon", {
+            const response = await fetch(`${CONFIG.API_BASE_URL}/api/recon`, {
                 method: "POST",
                 headers: {
                     'Authorization': 'Bearer ' + token,

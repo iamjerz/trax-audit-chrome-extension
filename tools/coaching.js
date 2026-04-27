@@ -1,78 +1,134 @@
-function SmartCoaching(){
-    const specific = document.getElementById('specific').value;
-    const measurable = document.getElementById('measurable').value;
-    const achievable = document.getElementById('achievable').value;
-    const relevant = document.getElementById('relevant').value;
-    const time_bound = document.getElementById('time-bound').value;
-
-    const Smart = {
-        specific: specific,
-        measurable: measurable,
-        achievable: achievable,
-        relevant: relevant,
-        time_bound: time_bound
-    };
-
-    return Smart
+function isEmpty(value) {
+    return !value || value.trim() === '';
 }
 
-function GrowCoaching(){
-    const grow_input = document.getElementById('grow-input')?.value || '';
-    const grow_comments = document.getElementById('grow-comments')?.value || '';
+// 🔴 Highlight invalid fields
+function markInvalid(id) {
+    const el = document.getElementById(id);
+    if (!el) return false;
 
-    const reality_input = document.getElementById('reality-input')?.value || '';
-    const reality_comments = document.getElementById('reality-comments')?.value || '';
-    
-    const option_input = document.getElementById('option-input')?.value || '';
-    const option_comments = document.getElementById('option-comments')?.value || '';
+    if (isEmpty(el.value)) {
+        el.style.border = '1px solid red';
+        return true;
+    } else {
+        el.style.border = ''; // reset
+        return false;
+    }
+}
 
-    const wayforward_input = document.getElementById('wayforward-input')?.value || '';
-    const wayforward_comments = document.getElementById('wayforward-comments')?.value || '';
+// ✅ SMART data
+function SmartCoaching() {
+    return {
+        specific: document.getElementById('specific')?.value || '',
+        measurable: document.getElementById('measurable')?.value || '',
+        achievable: document.getElementById('achievable')?.value || '',
+        relevant: document.getElementById('relevant')?.value || '',
+        time_bound: document.getElementById('time-bound')?.value || ''
+    };
+}
 
-    const SmartPlan = {
+// ✅ GROW data
+function GrowCoaching() {
+    return {
         grow: {
-            input: grow_input,
-            comments: grow_comments
+            input: document.getElementById('grow-input')?.value || '',
+            comments: document.getElementById('grow-comments')?.value || ''
         },
         reality: {
-            input: reality_input,
-            comments: reality_comments
+            input: document.getElementById('reality-input')?.value || '',
+            comments: document.getElementById('reality-comments')?.value || ''
         },
         option: {
-            input: option_input,
-            comments: option_comments
+            input: document.getElementById('option-input')?.value || '',
+            comments: document.getElementById('option-comments')?.value || ''
         },
         wayforward: {
-            input: wayforward_input,
-            comments: wayforward_comments
+            input: document.getElementById('wayforward-input')?.value || '',
+            comments: document.getElementById('wayforward-comments')?.value || ''
         }
     };
-    return SmartPlan
 }
 
+// ✅ Validate SMART fields
+function validateSmart() {
+    let hasError = false;
 
-$(document).ready(function() {
-    $(document).on('click', '#submit-coaching', async function() {
+    ['specific','measurable','achievable','relevant','time-bound'].forEach(id => {
+        if (markInvalid(id)) hasError = true;
+    });
+
+    return !hasError;
+}
+
+// ✅ Validate GROW fields
+function validateGrow() {
+    let hasError = false;
+
+    const ids = [
+        'grow-input','grow-comments',
+        'reality-input','reality-comments',
+        'option-input','option-comments',
+        'wayforward-input','wayforward-comments'
+    ];
+
+    ids.forEach(id => {
+        if (markInvalid(id)) hasError = true;
+    });
+
+    return !hasError;
+}
+
+$(document).ready(function () {
+    $(document).on('click', '#submit-coaching', async function () {
         try {
             const token = localStorage.getItem('token');
-            const email = localStorage.getItem('email').toLowerCase();
+            const email = localStorage.getItem('email')?.toLowerCase() || '';
             const coaching_reference = document.getElementById('coaching-reference')?.value || '';
+            const coaching_type = document.getElementById('coaching-type')?.value || '';
+            // 🔴 Validate Reference
+            if (isEmpty(coaching_reference)) {
+                markInvalid('coaching-reference');
+                alert('Coaching reference is required');
+                return;
+            }
+            // 🔴 Validate Reference
+            if (isEmpty(coaching_type)) {
+                markInvalid('coaching-type');
+                alert('Coaching type is required');
+                return;
+            }
 
+            // 🔴 Validate SMART
+            if (!validateSmart()) {
+                ShowAlertMessage("Please complete all SMART fields!", "error");
+                return;
+            }
+
+            // 🔴 Validate GROW
+            if (!validateGrow()) {
+                ShowAlertMessage("Please complete all GROW fields!", "error");
+                return;
+            }
+
+            // ✅ Build payload ONLY if valid
             const CoachingForm = {
-                Reference: coaching_reference,
-                Smart: SmartCoaching(),
-                Grow: GrowCoaching(),
-                Origin: "Extension",
+                reference_type: coaching_type,
+                reference: coaching_reference,
+                smart: SmartCoaching(),
+                grow: GrowCoaching(),
+                apps: "Extension",
                 email: email
             };
 
             console.log(CoachingForm);
+
+            
             showLoader();
-            const res = await fetch('https://audit-ops.traxtech.com/api/coaching', {
+            const res = await fetch(`${CONFIG.API_BASE_URL}/api/coaching`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json' // ✅ important
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(CoachingForm)
             });
@@ -82,10 +138,15 @@ $(document).ready(function() {
             }
 
             const data = await res.json();
-            if (data.status === 200) {
 
-                selection("Coaching");
+            if (data.status === 200) {
                 hideLoader();
+                ShowAlertMessage("Audit created successfully!", "success");
+                
+                
+                setTimeout(() => {
+                    selection("Coaching");
+                }, 3000);
             }
 
         } catch (err) {

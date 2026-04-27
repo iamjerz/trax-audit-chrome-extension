@@ -7,6 +7,7 @@ function hideLoader() {
 }
 
 
+
 function choicesInit(className) {
     const elements = document.querySelectorAll(className);
 
@@ -17,16 +18,25 @@ function choicesInit(className) {
     });
 }
 
+
+
 function dateTimeInit(className) {
     flatpickr(className)
 }
 
 function back_to_menu() {
     showLoader();
+
     const token = localStorage.getItem('token');
+    const email = localStorage.getItem('email').toLowerCase();
+
     $.ajax({
-        url: 'https://audit-ops.traxtech.com/api/forms/menu',
-        method: 'GET', // or POST
+        url: `${CONFIG.API_BASE_URL}/api/forms/menu`,
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({
+            email: email
+        }),
         headers: {
             'Authorization': 'Bearer ' + token,
             'Accept': 'application/json'
@@ -37,40 +47,19 @@ function back_to_menu() {
         },
         error: function(xhr) {
             console.log(xhr.responseText);
+            hideLoader(); // 👈 don’t forget this
         }
     });
 }
 
-// function recon_call_form() {
-//     showLoader();
-//     const token = localStorage.getItem('token');
-//     $.ajax({
-//         url: 'https://audit-ops.traxtech.com/api/forms/recon',
-//         method: 'GET', // or POST
-//         headers: {
-//             'Authorization': 'Bearer ' + token,
-//             'Accept': 'application/json'
-//         },
-//         success: function(response) {
-//             $('#page-body').html(response);
 
-//             choicesInit(".choices-js");
-//             dateTimeInit(".datetime-js");
-//             document.getElementById("lda-email").value = localStorage.getItem('email').toLowerCase();
-//             hideLoader();
-//         },
-//         error: function(xhr) {
-//             console.log(xhr.responseText);
-//         }
-//     });
-// }
 
 function loadForm(endpoint) {
     showLoader();
     const token = localStorage.getItem('token');
 
     $.ajax({
-        url: `https://audit-ops.traxtech.com/api/forms/${endpoint}`,
+        url: `${CONFIG.API_BASE_URL}/api/forms/${endpoint}`,
         method: 'GET',
         headers: {
             Authorization: `Bearer ${token}`,
@@ -109,7 +98,7 @@ document.getElementById("login").addEventListener("click", () => {
 
             const token = response.token;
             localStorage.setItem('token', token);
-            fetch("https://audit-ops.traxtech.com/api/login/verify", {
+            fetch(`${CONFIG.API_BASE_URL}/api/login/verify`, {
                     method: "GET",
                     headers: {
                         "Authorization": `Bearer ${token}`,
@@ -121,21 +110,7 @@ document.getElementById("login").addEventListener("click", () => {
                     if (data.status == "success") {
 
                         localStorage.setItem('email', data.email);
-                        $.ajax({
-                            url: 'https://audit-ops.traxtech.com/api/forms/menu',
-                            method: 'GET', // or POST
-                            headers: {
-                                'Authorization': 'Bearer ' + token,
-                                'Accept': 'application/json'
-                            },
-                            success: function(response) {
-                                $('#page-body').html(response);
-                                hideLoader();
-                            },
-                            error: function(xhr) {
-                                console.log(xhr.responseText);
-                            }
-                        });
+                        back_to_menu();
                     }
                 })
                 .catch(err => {
