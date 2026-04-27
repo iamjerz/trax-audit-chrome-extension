@@ -1,4 +1,4 @@
-const APP_ENV = false;
+const APP_ENV = true;
 
 const link = {
     prod: "https://audit-ops.traxtech.com",

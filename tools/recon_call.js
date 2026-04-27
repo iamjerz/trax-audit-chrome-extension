@@ -24,7 +24,7 @@ function reconSelect(title) {
             dynamicChoices();
             flatpickr(".datetime-js")
 
-            
+
             document.getElementById("lda-email").value = localStorage.getItem('email').toLowerCase();
             hideLoader();
         },
@@ -37,7 +37,7 @@ function reconSelect(title) {
 
 $(document).ready(function() {
     $(document).on('click', '#submitBtn', async function() {
-        showLoader();
+        
         const data = {
             submission_id: Date.now().toString(), // temporary unique ID
             recon_call_date: document.getElementById("recon-call-date").value,
@@ -56,6 +56,27 @@ $(document).ready(function() {
             }
         };
 
+        const requiredFields = [
+            data.recon_call_date,
+            data.audit_sup_email,
+            data.client_code,
+            data.carrier_code,
+            data.region,
+            data.action_item_summary,
+            data.action_item_details,
+            data.jira_ticket,
+            data.status
+        ];
+
+        const hasEmpty = requiredFields.some(field => !field || field.trim() === "");
+
+        if (hasEmpty) {
+            alert("Please fill out all required fields.");
+            return;
+        }
+
+
+        showLoader();
         const token = localStorage.getItem('token');
 
         try {
