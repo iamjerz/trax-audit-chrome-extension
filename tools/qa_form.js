@@ -25,7 +25,7 @@ function qa_form() {
             $('#page-body').html(response);
 
             initQAform();
-            flatpickr("#audit-date2", {
+            flatpickr("#audit-date2, #audit-date1", {
                 defaultDate: "today",
                 clickOpens: false, // disables opening calendar
                 allowInput: false  // prevents typing
@@ -416,6 +416,7 @@ function initQAform() {
 
         userInputData.AuditorsName = document.getElementById("auditors-name").value;
         userInputData.AuditDate2 = document.getElementById("audit-date2").value;
+        userInputData.AuditDate1 = document.getElementById("audit-date1").value;
         userInputData.CarrierName = document.getElementById("carrier-name").value;
         userInputData.ExceptionStatus = document.getElementById("exception-status").value;
         userInputData.ExceptionOwner = document.getElementById("exception-owner").value;
