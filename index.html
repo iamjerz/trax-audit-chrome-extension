@@ -20,6 +20,7 @@
 	<!-- App Css-->
 	<link href="assets/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
 	<link href="assets/libs/sweetalert2/sweetalert2.min.css" id="app-style" rel="stylesheet" type="text/css" />
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 	<style>
 		/* Overlay background */
 		#page-loader {
@@ -67,6 +68,133 @@
 		@keyframes spin {
 		    to { transform: rotate(360deg); }
 		}
+
+		/* Reasons Section */
+        .reasons-heading {
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #495057;
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .reason-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .reason-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.85rem;
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            background-color: #f8f9fa;
+            transition: background-color 0.2s ease;
+        }
+
+        .reason-item:hover {
+            background-color: #eef1f5;
+        }
+
+        .reason-item .reason-icon {
+            flex-shrink: 0;
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.05rem;
+        }
+
+        .reason-item .icon-bg-1 { background: #fff4e5; color: #f57c00; }
+        .reason-item .icon-bg-2 { background: #e8f4fd; color: #0d6efd; }
+        .reason-item .icon-bg-3 { background: #fdecea; color: #dc3545; }
+        .reason-item .icon-bg-4 { background: #e7f6ec; color: #198754; }
+
+        .reason-item .reason-content {
+            flex: 1;
+        }
+
+        .reason-item .reason-title {
+            font-weight: 600;
+            color: #212529;
+            font-size: 0.95rem;
+            margin-bottom: 0.15rem;
+        }
+
+        .reason-item .reason-desc {
+            font-size: 0.85rem;
+            color: #6c757d;
+            margin: 0;
+            line-height: 1.4;
+        }
+        .alert-icon-wrapper {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .alert-icon-wrapper .icon-circle {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: #fdecea;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #dc3545;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .alert-message-title {
+            text-align: center;
+            font-weight: 600;
+            color: #212529;
+            margin-bottom: 0.35rem;
+            font-size: 1.2rem;
+        }
+
+        .alert-message-subtitle {
+            text-align: center;
+            color: #6c757d;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        /* Modal Header Styling */
+        #message-alert .modal-content {
+            border: none;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        #message-alert .modal-header {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            color: #fff;
+            border-bottom: none;
+            padding: 1.25rem 1.5rem;
+        }
+
+        #message-alert .modal-header .modal-title {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-weight: 600;
+            font-size: 1.15rem;
+        }
+
+        #message-alert .modal-header .btn-close {
+            filter: brightness(0) invert(1);
+            opacity: 0.9;
+        }
 	</style>
 </head>
 <body>
@@ -95,7 +223,7 @@
 	            <div class="card">
 	                <div class="card-body">
 	                    <div class="d-grid gap-2">
-	                        <button type="button" id="login" class="btn btn-primary waves-effect waves-light">
+	                        <button type="button" id="login" class="btn btn-primary waves-effect waves-light" disabled>
 	                            <i class="bx bxl-microsoft"></i> Microsoft
 	                        </button>
 	                    </div>
@@ -108,6 +236,108 @@
 	        </div>
 		</div>
 	</div>	
+
+	<div class="modal fade" id="message-alert" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-white" id="staticBackdropLabel"><i class="bi bi-wifi-off"></i>Connection Error</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body row">
+                	<div class="alert-icon-wrapper text-center">
+                        <div class="icon-circle">
+                            <i class="bi bi-cloud-slash-fill"></i>
+                        </div>
+                    </div>
+                    <!-- Main Message -->
+                    <h5 class="alert-message-title">Unable to Connect to the Server</h5>
+                    <p class="alert-message-subtitle">
+                        We couldn't establish a connection. Please check the possible reasons below and try again.
+                    </p>
+                    <div class="reasons-section">
+                        <div class="reasons-heading">
+                            <i class="bi bi-info-circle me-1"></i> Possible Reasons
+                        </div>
+
+                        <ul class="reason-list">
+                            <li class="reason-item">
+                                <span class="reason-icon icon-bg-1">
+                                    <i class="bi bi-arrow-repeat"></i>
+                                </span>
+                                <div class="reason-content">
+                                    <div class="reason-title">Connection has been lost</div>
+                                    <p class="reason-desc">Your session with the server may have timed out or been interrupted. Try refreshing the page.</p>
+                                </div>
+                            </li>
+
+                            <li class="reason-item">
+                                <span class="reason-icon icon-bg-2">
+                                    <i class="bi bi-shield-lock-fill"></i>
+                                </span>
+                                <div class="reason-content">
+                                    <div class="reason-title">You are not connected to the VPN</div>
+                                    <p class="reason-desc">This system requires an active VPN connection. Please connect to the company VPN and try again.</p>
+                                </div>
+                            </li>
+
+                            <li class="reason-item">
+                                <span class="reason-icon icon-bg-3">
+                                    <i class="bi bi-router-fill"></i>
+                                </span>
+                                <div class="reason-content">
+                                    <div class="reason-title">No Internet Connection</div>
+                                    <p class="reason-desc">Check your Wi-Fi or network cable. Ensure your device is connected to a stable internet source.</p>
+                                </div>
+                            </li>
+
+                            <li class="reason-item">
+                                <span class="reason-icon icon-bg-4">
+                                    <i class="bi bi-building"></i>
+                                </span>
+                                <div class="reason-content">
+                                    <div class="reason-title">You are not Onsite / in the Office</div>
+                                    <p class="reason-desc">This resource may only be accessible from within the office network. Please connect from an authorized location.</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div class="modal fade" id="message-alert-details" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-white" id="staticBackdropLabel"><i class="bi bi-wifi-off"></i>Outdated Version</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body row">
+                    <div class="alert-icon-wrapper text-center">
+                        <div class="icon-circle">
+                            <i class="bi bi-cloud-slash-fill"></i>
+                        </div>
+                    </div>
+                    <!-- Main Message -->
+                    <h5 class="alert-message-title">Unable to proceed</h5>
+                    <p class="alert-message-subtitle">
+                        We couldn't establish a connection. Please update your Chrome Extension in to the latest version.
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 <!-- JAVASCRIPT -->
 

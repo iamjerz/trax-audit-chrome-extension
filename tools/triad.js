@@ -80,7 +80,7 @@ $(document).ready(function() {
     $(document).on('click', '#submit-triad', async function() {
         try {
             const token = localStorage.getItem('token');
-            const email = localStorage.getItem('email').toLowerCase();
+            const email = localStorage.getItem('email')?.toLowerCase() || '';
             const coaching_reference = document.getElementById('coaching-reference')?.value || '';
 
             const TriadForm = {
@@ -106,19 +106,22 @@ $(document).ready(function() {
             }
 
             const data = await res.json();
-            if (data.status === 200) {
-                hideLoader();
+            hideLoader();
 
-                ShowAlertMessage("Audit created successfully!", "success");
+            if (data.status === 200) {
+                ShowAlertMessage("Triad Coaching Submitted Successfully!", "success");
 
                 setTimeout(() => {
                     selection("Triad");
                 }, 3000);
-                
+            } else {
+                ShowAlertMessage(data.message || "Submission failed. Please try again.", "error");
             }
 
         } catch (err) {
+            hideLoader();
             console.error("Request failed:", err);
+            ShowAlertMessage("Submission failed. Please check your connection and try again.", "error");
         }
     });
 });

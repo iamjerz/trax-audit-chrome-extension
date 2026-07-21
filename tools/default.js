@@ -112,6 +112,16 @@ function appendCarrierCode(client_code) {
         },
         error: function(xhr) {
             console.log(xhr.responseText);
+            // Re-enable the dropdown and clear the spinner so the UI is not stuck
+            const coachingChoices = choicesMap['carrier-code'];
+            if (coachingChoices) {
+                coachingChoices.clearChoices();
+                coachingChoices.setChoices([
+                    { value: '', label: 'Could not load carrier codes', disabled: true }
+                ], 'value', 'label', true);
+                coachingChoices.enable();
+            }
+            hideLoader();
         }
     });
 }

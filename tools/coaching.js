@@ -139,18 +139,22 @@ $(document).ready(function () {
 
             const data = await res.json();
 
+            hideLoader();
+
             if (data.status === 200) {
-                hideLoader();
-                ShowAlertMessage("Audit created successfully!", "success");
-                
-                
+                ShowAlertMessage("Coaching Submitted Successfully!", "success");
+
                 setTimeout(() => {
                     selection("Coaching");
                 }, 3000);
+            } else {
+                ShowAlertMessage(data.message || "Submission failed. Please try again.", "error");
             }
 
         } catch (err) {
+            hideLoader();
             console.error("Request failed:", err);
+            ShowAlertMessage("Submission failed. Please check your connection and try again.", "error");
         }
     });
 });

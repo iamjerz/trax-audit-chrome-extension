@@ -8,7 +8,8 @@ function qa_form() {
     showLoader();
 
     const token = localStorage.getItem('token');
-    const email = localStorage.getItem('email').toLowerCase();
+    const storedEmail = localStorage.getItem('email');
+    const email = storedEmail ? storedEmail.toLowerCase() : '';
 
     $.ajax({
         url: `${CONFIG.API_BASE_URL}/api/forms/qa`,
@@ -27,7 +28,7 @@ function qa_form() {
             initQAform();
             flatpickr("#audit-date2, #audit-date1", {
                 defaultDate: "today",
-                clickOpens: false, // disables opening calendar
+                clickOpens: true, // disables opening calendar
                 allowInput: false  // prevents typing
             });
             if (email) {
@@ -38,6 +39,7 @@ function qa_form() {
         },
         error: function(xhr) {
             console.log(xhr.responseText);
+            hideLoader();
         }
     });
 }
@@ -352,13 +354,16 @@ function initQAform() {
 
             console.log("verificationPercentage:", verificationPercentage);
 
-            if (verificationPercentage < 99) {
-                document.getElementById("overall-score").textContent = "0%";
-            } else {
-                const overallTotal = totalProcessComplianceData + totalEngagementData;
-                const overallPercentage = OverAllScoreCalcu(overallTotal);
-                console.log("Overall Score Percentage:", overallPercentage);
-                document.getElementById("overall-score").textContent = overallPercentage + "%";
+            const overallScoreEl = document.getElementById("overall-score");
+            if (overallScoreEl) {
+                if (verificationPercentage < 99) {
+                    overallScoreEl.textContent = "0%";
+                } else {
+                    const overallTotal = totalProcessComplianceData + totalEngagementData;
+                    const overallPercentage = OverAllScoreCalcu(overallTotal);
+                    console.log("Overall Score Percentage:", overallPercentage);
+                    overallScoreEl.textContent = overallPercentage + "%";
+                }
             }
 
         });
@@ -459,10 +464,11 @@ function initQAform() {
 
             })
             .catch(err => {
+                hideLoader();
                 ShowAlertMessage("Failed to submit audit. Check console.", "error");
+                // 'err' is the rejected value (parsed body when !res.ok, or the thrown error).
+                // The previous code referenced an undefined 'data' here, which threw inside the catch.
                 console.error("API ERROR:", err);
-                console.log("API ERROR:", data);
-                // alert("Failed to submit audit. Check console.");
             });
     });
 }

@@ -25,11 +25,13 @@ function reconSelect(title) {
             flatpickr(".datetime-js")
 
 
-            document.getElementById("lda-email").value = localStorage.getItem('email').toLowerCase();
+            const email = localStorage.getItem('email');
+            document.getElementById("lda-email").value = email ? email.toLowerCase() : '';
             hideLoader();
         },
         error: function(xhr) {
             console.log(xhr.responseText);
+            hideLoader();
         }
     });
 }
@@ -98,10 +100,12 @@ $(document).ready(function() {
                 alert("✅ Saved successfully!");
                 reconSelect("recon")
             } else {
+                hideLoader();
                 alert("❌ Error: " + JSON.stringify(result));
             }
 
         } catch (error) {
+            hideLoader();
             console.error(error);
             alert("❌ Request failed");
         }

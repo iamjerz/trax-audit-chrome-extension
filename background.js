@@ -28,6 +28,12 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                     return;
                 }
 
+                // User cancelled or the flow returned nothing usable
+                if (!redirectUrl) {
+                    sendResponse({ error: "Authentication was cancelled or returned no result." });
+                    return;
+                }
+
                 const params = new URLSearchParams(
                     new URL(redirectUrl).hash.substring(1)
                 );
@@ -35,10 +41,16 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                 const accessToken = params.get("access_token");
                 const expiresIn = params.get("expires_in"); // seconds
 
+                // The fragment may carry an OAuth error instead of a token
+                if (!accessToken) {
+                    const authError = params.get("error_description") || params.get("error") || "No access token returned.";
+                    sendResponse({ error: authError });
+                    return;
+                }
+
                 sendResponse({
                     token: accessToken,
-                    expiresIn: expiresIn,
-                    parameters: params
+                    expiresIn: expiresIn
                 });
             }
         );
@@ -51,4 +63,6 @@ chrome.runtime.onInstalled.addListener(() => {
     chrome.sidePanel.setPanelBehavior({
         openPanelOnActionClick: true
     });
+
 });
+
