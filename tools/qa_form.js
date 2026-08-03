@@ -55,8 +55,10 @@ function initQAform() {
         AuditDate2: "",
         InvoiceID: "",
         CarrierName: "",
+        ClientCode: "",
         ExceptionStatus: "",
-        ExceptionOwner: ""
+        ExceptionOwner: "",
+        IsCalibration: false
     };
 
     const verificationData = {
@@ -149,8 +151,10 @@ function initQAform() {
         "audit-date2": "AuditDate2",
         "invoice-id": "InvoiceID",
         "carrier-name": "CarrierName",
+        "client-code": "ClientCode",
         "exception-status": "ExceptionStatus",
-        "exception-owner": "ExceptionOwner"
+        "exception-owner": "ExceptionOwner",
+        "calibration" : "Calibration"
     };
 
     const textareaVerificationMap = {
@@ -353,6 +357,8 @@ function initQAform() {
 
 
             console.log("verificationPercentage:", verificationPercentage);
+            
+            
 
             const overallScoreEl = document.getElementById("overall-score");
             if (overallScoreEl) {
@@ -403,6 +409,14 @@ function initQAform() {
     });
 
 
+    const calibrationCheckbox = document.getElementById("calibration");
+    if (calibrationCheckbox) {
+        calibrationCheckbox.addEventListener("change", function() {
+            userInputData.IsCalibration = this.checked;
+            console.log("User Input:", userInputData);
+        });
+    }
+
     document.querySelectorAll(".datepicker-humanfd").forEach(el => {
         flatpickr(el, {
             altInput: true,
@@ -423,6 +437,7 @@ function initQAform() {
         userInputData.AuditDate2 = document.getElementById("audit-date2").value;
         userInputData.AuditDate1 = document.getElementById("audit-date1").value;
         userInputData.CarrierName = document.getElementById("carrier-name").value;
+        userInputData.ClientCode  = document.getElementById("client-code").value;
         userInputData.ExceptionStatus = document.getElementById("exception-status").value;
         userInputData.ExceptionOwner = document.getElementById("exception-owner").value;
 

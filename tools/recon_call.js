@@ -48,9 +48,12 @@ $(document).ready(function() {
             client_code: document.getElementById("client-code").value,
             carrier_code: document.getElementById("carrier-code").value,
             region: document.getElementById("region").value,
+            completion_date: document.getElementById("completion-date").value,
+            action_owner: document.getElementById("action-owner").value,
             action_item_summary: document.getElementById("action-item-summary").value,
             action_item_details: document.getElementById("action-item-detail").value,
             jira_ticket: document.getElementById("jira-link").value,
+            invoice_status: document.getElementById("invoice-status").value,
             status: document.getElementById("status").value,
             raw_data: {
                 source: "Chrome Extension",
@@ -67,7 +70,10 @@ $(document).ready(function() {
             data.action_item_summary,
             data.action_item_details,
             data.jira_ticket,
-            data.status
+            data.status,
+            data.completion_date,
+            data.action_owner,
+            data.invoice_status
         ];
 
         const hasEmpty = requiredFields.some(field => !field || field.trim() === "");
@@ -80,6 +86,8 @@ $(document).ready(function() {
 
         showLoader();
         const token = localStorage.getItem('token');
+
+        console.log("DATA DATA: ", data)
 
         try {
             const response = await fetch(`${CONFIG.API_BASE_URL}/api/recon`, {
