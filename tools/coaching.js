@@ -82,6 +82,7 @@ $(document).ready(function () {
     $(document).on('click', '#submit-coaching', async function () {
         try {
             const token = localStorage.getItem('token');
+            const coached_employeeid = document.getElementById('lda-name')?.value || '';
             const email = localStorage.getItem('email')?.toLowerCase() || '';
             const coaching_reference = document.getElementById('coaching-reference')?.value || '';
             const coaching_type = document.getElementById('coaching-type')?.value || '';
@@ -117,7 +118,8 @@ $(document).ready(function () {
                 smart: SmartCoaching(),
                 grow: GrowCoaching(),
                 apps: "Extension",
-                email: email
+                email: email,
+                coached_employeeid: coached_employeeid
             };
 
             console.log(CoachingForm);

@@ -84,7 +84,7 @@ $(document).ready(function() {
         }
 
 
-        showLoader();
+        // showLoader();
         const token = localStorage.getItem('token');
 
         console.log("DATA DATA: ", data)
@@ -105,8 +105,12 @@ $(document).ready(function() {
             console.log(result);
 
             if (response.ok) {
-                alert("✅ Saved successfully!");
-                reconSelect("recon")
+                // alert("✅ Saved successfully!");
+                ShowAlertMessage("Recon Call Submitted Successfully!", "success");
+                setTimeout(() => {
+                    reconSelect("recon")
+                }, 3000);
+                
             } else {
                 hideLoader();
                 alert("❌ Error: " + JSON.stringify(result));

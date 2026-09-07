@@ -80,6 +80,7 @@ $(document).ready(function() {
     $(document).on('click', '#submit-triad', async function() {
         try {
             const token = localStorage.getItem('token');
+            const coached_employeeid = document.getElementById('lda-name')?.value || '';
             const email = localStorage.getItem('email')?.toLowerCase() || '';
             const coaching_reference = document.getElementById('coaching-reference')?.value || '';
 
@@ -87,7 +88,8 @@ $(document).ready(function() {
                 Reference: coaching_reference,
                 Triad: TriadCoach(),
                 Origin: "Extension",
-                email: email
+                email: email,
+                coached_employeeid: coached_employeeid
             };
 
             console.log(TriadForm);

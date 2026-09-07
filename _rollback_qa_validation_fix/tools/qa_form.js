@@ -433,12 +433,6 @@ function initQAform() {
         const auditBy = document.getElementById("audit-by").value;
         userInputData["AuditBy"] = auditBy;
 
-        // Safety-net re-reads: these dropdowns are also populated via the Choices
-        // "change" listener above, but we re-read directly from the DOM here too,
-        // the same way ClientCode/CarrierName already were, so a value picked
-        // without a captured change event still makes it into the payload.
-        userInputData.ldaName = document.getElementById("lda-name")?.value || userInputData.ldaName;
-        userInputData.AuditSupName = document.getElementById("audit-sup-name")?.value || userInputData.AuditSupName;
         userInputData.AuditorsName = document.getElementById("auditors-name").value;
         userInputData.AuditDate2 = document.getElementById("audit-date2").value;
         userInputData.AuditDate1 = document.getElementById("audit-date1").value;
@@ -447,30 +441,7 @@ function initQAform() {
         userInputData.ExceptionStatus = document.getElementById("exception-status").value;
         userInputData.ExceptionOwner = document.getElementById("exception-owner").value;
 
-        // 🔴 Required-field validation — block submission if a core field is empty.
-        // Previously nothing checked this, so e.g. a null Client Code still submitted
-        // successfully. InvoiceID and Calibration are left optional on purpose.
-        const requiredFieldChecks = [
-            { value: userInputData.AuditBy, label: "Audited By" },
-            { value: userInputData.ldaName, label: "LDA Name" },
-            { value: userInputData.AuditSupName, label: "Audit Supervisor Name" },
-            { value: userInputData.AuditorsName, label: "Auditor's Name" },
-            { value: userInputData.AuditDate1, label: "Audit Date 1" },
-            { value: userInputData.AuditDate2, label: "Audit Date 2" },
-            { value: userInputData.CarrierName, label: "Carrier Name" },
-            { value: userInputData.ClientCode, label: "Client Code" },
-            { value: userInputData.ExceptionStatus, label: "Exception Status" },
-            { value: userInputData.ExceptionOwner, label: "Exception Owner" }
-        ];
 
-        const missingFields = requiredFieldChecks
-            .filter(field => !field.value || !field.value.toString().trim())
-            .map(field => field.label);
-
-        if (missingFields.length > 0) {
-            ShowAlertMessage(`Please complete: ${missingFields.join(", ")}`, "error");
-            return;
-        }
 
         const payload = {
             userInputData,
