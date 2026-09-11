@@ -84,8 +84,8 @@ function appendCarrierCode(client_code) {
             const list = response.list || response.data || response.results || [];
            console.log("LIST LIST LIST:", list);
             const items = list.map(u => ({
-                value: u.combo_carrier_code,
-                label: u.combo_carrier_code
+                value: u.name,
+                label: u.name
             }));
 
             console.log("NORMALIZED:", list);
